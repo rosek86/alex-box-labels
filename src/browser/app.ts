@@ -6,7 +6,7 @@ import { populateLanguages, restoreLocale, saveLocale, translateDocument } from 
 import type { LabelProject } from '../core/types.ts';
 import { LABEL_PRESETS } from '../data/presets.ts';
 import { requiredElement } from './dom.ts';
-import { applyProject, readSettings } from './settings-form.ts';
+import { applyProject, applySettings, readSettings } from './settings-form.ts';
 import { renderPreview } from './render.ts';
 import { downloadProject, downloadSheets, readProjectFile } from './project-files.ts';
 import { restoreProject, saveProject } from './storage.ts';
@@ -96,6 +96,11 @@ languageSelect.addEventListener('change', () => {
 });
 
 editor.addEventListener('input', queueRender);
+requiredElement('#cutting-layout', HTMLButtonElement).addEventListener('click', () => {
+  revision++;
+  applySettings(DEFAULTS, form);
+  render();
+});
 form.addEventListener('input', queueRender);
 form.addEventListener('submit', (event) => event.preventDefault());
 requiredElement('#load-preset', HTMLButtonElement).addEventListener('click', () => {

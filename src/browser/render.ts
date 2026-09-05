@@ -1,6 +1,7 @@
 import type { Translate } from '../i18n/index.ts';
 import { LabelError } from '../core/errors.ts';
 import { fitText } from '../core/text.ts';
+import { createOutlines, createLabelFrames, LABEL_FRAME_WIDTH } from '../core/outlines.ts';
 import { PAGE } from '../core/constants.ts';
 import type { LabelLayout, LabelSlot, MeasureText } from '../core/types.ts';
 import { svgElement } from './dom.ts';
@@ -40,6 +41,23 @@ export function renderPreview(container: HTMLElement, layout: LabelLayout, t: Tr
     });
     const defs = svgElement('defs');
     svg.append(defs);
+    // Keep the cutting lane between populated frames white, including in the preview.
+    const previewSlots = settings.borders ? slots.filter((slot) => !slot.text?.trim()) : slots;
+    for (const line of createOutlines(previewSlots, settings, { includeEmpty: true })) {
+      svg.append(svgElement('line', { ...line, class: 'preview-guide' }));
+    }
+    if (settings.borders) {
+      for (const frame of createLabelFrames(slots, settings)) {
+        svg.append(
+          svgElement('rect', {
+            ...frame,
+            fill: 'none',
+            stroke: 'black',
+            'stroke-width': LABEL_FRAME_WIDTH,
+          }),
+        );
+      }
+    }
     for (const slot of slots) {
       const rect = {
         x: slot.x,
@@ -47,20 +65,7 @@ export function renderPreview(container: HTMLElement, layout: LabelLayout, t: Tr
         width: settings.labelWidth,
         height: settings.labelHeight,
       };
-      svg.append(svgElement('rect', { ...rect, class: 'preview-guide' }));
       if (slot.text === null || !slot.text.trim()) continue;
-      if (settings.borders)
-        svg.append(
-          svgElement('rect', {
-            x: slot.x + 0.05,
-            y: slot.y + 0.05,
-            width: settings.labelWidth - 0.1,
-            height: settings.labelHeight - 0.1,
-            fill: 'none',
-            stroke: 'black',
-            'stroke-width': 0.1,
-          }),
-        );
       const fitted = fitText(slot.text, settings, measure);
       if (!fitted) {
         overflow.push(slot.index + 1);

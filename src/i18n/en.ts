@@ -1,4 +1,9 @@
 export const en = {
+  'sheet.cutGuideHelp':
+    'Each label keeps its own closed black frame. With zero gaps, cut once through the middle of the 0.3 mm white space between neighbouring frames.',
+  'sheet.cuttingLayout': 'Use 7 × 23 cutting layout',
+  'sheet.cuttingHelp':
+    'Restores all sheet settings to the cutting defaults, including zero skipped slots. Your label text is preserved.',
   'export.projectFilename': 'labels.json',
   'export.sheetFilename': 'labels-{page}.svg',
   'labels.exampleHelp':
@@ -24,7 +29,8 @@ export const en = {
   'labels.help': 'An empty line reserves a blank slot. Long descriptions wrap automatically.',
   'labels.import': 'Import a JSON project or TXT list',
   'sheet.heading': 'A4 sheet',
-  'sheet.help': 'Dimensions in mm. Default: 22 × 9 mm labels on a sheet for cutting by hand.',
+  'sheet.help':
+    'Dimensions in mm. Default: 22 × 9 mm labels with no gaps, centred on A4 in a 7 × 23 grid.',
   'settings.labelWidth': 'Label width',
   'settings.labelHeight': 'Label height',
   'settings.gapX': 'Horizontal gap',
@@ -39,7 +45,7 @@ export const en = {
   'settings.skip': 'Skip slots on first page',
   'settings.fontMin': 'Min. font size (mm)',
   'settings.fontMax': 'Max. font size (mm)',
-  'settings.borders': 'Print cutting outlines',
+  'settings.borders': 'Print a black frame around each label',
   'storage.help':
     'Your project is saved locally in this browser. Save it as JSON before replacing the list.',
   'preview.heading': 'Print preview',

@@ -1,6 +1,11 @@
 import type { Messages } from './en.ts';
 
 export const pl = {
+  'sheet.cutGuideHelp':
+    'Każda etykieta zachowuje własną zamkniętą czarną ramkę. Przy zerowych odstępach tnij raz pośrodku białego prześwitu 0,3 mm między sąsiednimi ramkami.',
+  'sheet.cuttingLayout': 'Ustaw układ do cięcia 7 × 23',
+  'sheet.cuttingHelp':
+    'Przywraca domyślne ustawienia arkusza do cięcia, w tym brak pomijanych pól. Zachowuje opisy etykiet.',
   'export.projectFilename': 'etykiety.json',
   'export.sheetFilename': 'etykiety-{page}.svg',
   'labels.exampleHelp':
@@ -25,7 +30,8 @@ export const pl = {
   'labels.help': 'Pusty wiersz zostawia wolne miejsce. Długie opisy zawijają się automatycznie.',
   'labels.import': 'Wczytaj projekt JSON lub listę TXT',
   'sheet.heading': 'Arkusz A4',
-  'sheet.help': 'Wymiary w mm. Domyślnie: etykiety 22 × 9 mm na arkuszu do samodzielnego cięcia.',
+  'sheet.help':
+    'Wymiary w mm. Domyślnie: etykiety 22 × 9 mm bez przerw, wyśrodkowane na A4 w siatce 7 × 23.',
   'settings.labelWidth': 'Szerokość etykiety',
   'settings.labelHeight': 'Wysokość etykiety',
   'settings.gapX': 'Odstęp poziomy',
@@ -40,7 +46,7 @@ export const pl = {
   'settings.skip': 'Pomiń pola na 1. stronie',
   'settings.fontMin': 'Min. czcionka (mm)',
   'settings.fontMax': 'Maks. czcionka (mm)',
-  'settings.borders': 'Drukuj obrysy do cięcia',
+  'settings.borders': 'Drukuj czarną ramkę wokół każdej etykiety',
   'storage.help':
     'Projekt jest zapisywany lokalnie w tej przeglądarce. Przed wymianą listy możesz zapisać go do JSON.',
   'preview.heading': 'Podgląd wydruku',

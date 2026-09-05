@@ -24,6 +24,7 @@ const PUBLIC_FILES = new Set([
   'src/core/settings.ts',
   'src/core/labels.ts',
   'src/core/layout.ts',
+  'src/core/outlines.ts',
   'src/core/text.ts',
   'src/core/project.ts',
   'src/data/presets.ts',

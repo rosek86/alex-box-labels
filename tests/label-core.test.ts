@@ -10,7 +10,7 @@ import type { MeasureText } from '../src/core/types.ts';
 
 const measure: MeasureText = (text, size) => Array.from(text).length * size * 0.5;
 
-test('oryginalny układ: 7 kolumn, 23 wiersze i 161 pól', () => {
+test('domyślny układ: 7 kolumn, 23 wiersze i 161 pól', () => {
   const grid = validateSettings(DEFAULTS);
   assert.deepEqual([grid.columns, grid.rows, grid.capacity], [7, 23, 161]);
 });
@@ -54,15 +54,15 @@ test('TXT zachowuje puste pola, obsługuje BOM oraz CRLF', () => {
 test('przesunięcie jest stosowane do współrzędnych, bez zmiany siatki', () => {
   const result = createLayout(['A'], { offsetX: -2, offsetY: 1 });
   assert.equal(result.capacity, 161);
-  assert.equal(result.pages[0]![0]!.x, 19);
-  assert.equal(result.pages[0]![0]!.y, 30.7);
+  assert.equal(result.pages[0]![0]!.x, 26);
+  assert.equal(result.pages[0]![0]!.y, 46);
 });
 test('niepoprawne konfiguracje są odrzucane przed renderowaniem', () => {
   for (const settings of [
     { labelWidth: 0 },
     { gapY: -1 },
     { marginTop: 300 },
-    { offsetX: -22 },
+    { offsetX: -29 },
     { offsetY: 50 },
     { skip: 161 },
     { skip: 1.5 },
@@ -125,4 +125,22 @@ test('import nie akceptuje obiektów zamiast opisów ani obcej wersji', () => {
   ]) {
     assert.throws(() => parseProject(value));
   }
+});
+
+test('saved projects retain their explicit margins and gaps', () => {
+  const settings = {
+    ...DEFAULTS,
+    gapX: 1,
+    gapY: 1,
+    marginLeft: 21,
+    marginRight: 21,
+    marginTop: 29.7,
+    marginBottom: 29.7,
+  };
+  const project = parseProject({ version: 1, settings, labels: ['M3', 'M4'] });
+  assert.deepEqual(project.settings, settings);
+  const layout = createLayout(project.labels, project.settings);
+  assert.equal(layout.capacity, 161);
+  assert.equal(layout.pages[0]?.[0]?.x, 21);
+  assert.equal(layout.pages[0]?.[1]?.x, 44);
 });

@@ -14,3 +14,20 @@ test('the single screw example fills exactly one default A4 sheet without gaps o
   assert.equal(layout.pages.length, 1);
   assert.ok(layout.pages[0]?.every((slot) => slot.text?.trim()));
 });
+
+test('the default cutting block is centred and neighbouring labels touch', () => {
+  const layout = createLayout(LABEL_PRESETS.bolts, DEFAULTS);
+  const slots = layout.pages[0];
+  assert.ok(slots);
+  const first = slots[0];
+  const second = slots[1];
+  const nextRow = slots[7];
+  const last = slots.at(-1);
+  assert.ok(first && second && nextRow && last);
+  assert.equal(first.x, 28);
+  assert.equal(first.y, 45);
+  assert.equal(first.x + DEFAULTS.labelWidth, second.x);
+  assert.equal(first.y + DEFAULTS.labelHeight, nextRow.y);
+  assert.equal(210 - last.x - DEFAULTS.labelWidth, first.x);
+  assert.equal(297 - last.y - DEFAULTS.labelHeight, first.y);
+});

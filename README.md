@@ -31,7 +31,7 @@ The only included example is a **161-label screw, nut and washer list**, coverin
 2. Set label dimensions, margins and horizontal/vertical gaps to match your sheet and printed boxes. All dimensions, including font sizes, are in millimetres.
 3. For a partly used sheet, set **Skip slots on first page**. Labels run left to right, then top to bottom; subsequent pages start at the first slot.
 4. Use **X offset** and **Y offset** to calibrate alignment. Positive values move labels right and down without changing the grid size.
-5. Enable **Print cutting outlines** for a full adhesive sheet you will cut yourself. Disable it for pre-cut labels. Blank and unused slots have no printed outlines; dashed guides are preview-only.
+5. Enable **Print a black frame around each label** for a full adhesive sheet you will cut yourself. Every populated label gets its own closed rectangular frame, drawn 0.2 mm inside its boundary with a 0.1 mm stroke. With zero gaps, neighbouring frames leave 0.3 mm of clear paper: make one knife cut down its middle. The cut labels retain their full black frames and their 22 × 9 mm dimensions. Disable frames for pre-cut labels if desired. Blank and unused slots have no printed frame; dashed slot boundaries appear only in the preview.
 6. Choose **Print / PDF**. Select A4 portrait, **100% / actual size**, no browser margins, and no headers or footers. Disable scaling to the printable area.
 7. Test on plain paper before printing onto adhesive paper.
 
@@ -41,12 +41,14 @@ Default settings:
 | --------------------------- | ------------------------- |
 | Paper                       | A4 portrait, 210 × 297 mm |
 | Label                       | 22 × 9 mm                 |
-| Horizontal and vertical gap | 1 mm                      |
-| Left and right margins      | 21 mm                     |
-| Top and bottom margins      | 29.7 mm                   |
+| Horizontal and vertical gap | 0 mm                      |
+| Left and right margins      | 28 mm                     |
+| Top and bottom margins      | 45 mm                     |
 | Text padding                | 0.8 mm                    |
 | Font size                   | 2–3 mm                    |
 | Capacity                    | 161 labels per page       |
+
+The default block is 154 × 207 mm, centred on A4. Labels touch along their edges, so there are no waste strips between them. Use **Use 7 × 23 cutting layout** to apply the new defaults to an existing saved project; descriptions are preserved, while all sheet settings (including skipped slots) reset. Previously saved and imported dimensions remain unchanged until you choose this action.
 
 The default grid is intended for a sheet cut by hand, not a specific commercial pre-cut label product. Changing dimensions or skipping slots can make the screw example span more than one page.
 

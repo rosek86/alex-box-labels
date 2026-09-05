@@ -25,8 +25,12 @@ export function applyProject(
   form: HTMLFormElement,
 ): void {
   editor.value = project.labels.join('\n');
+  applySettings(project.settings, form);
+}
+
+export function applySettings(settings: Readonly<LabelSettings>, form: HTMLFormElement): void {
   for (const key of NUMERIC_SETTINGS) {
-    settingInput(form, key).value = String(project.settings[key]);
+    settingInput(form, key).value = String(settings[key]);
   }
-  settingInput(form, 'borders').checked = project.settings.borders;
+  settingInput(form, 'borders').checked = settings.borders;
 }

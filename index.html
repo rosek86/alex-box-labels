@@ -75,7 +75,15 @@
         <section>
           <h2>02 <span data-i18n="sheet.heading">A4 sheet</span></h2>
           <p class="hint" data-i18n="sheet.help">
-            Dimensions in mm. Default: 22 × 9 mm labels on a sheet for cutting by hand.
+            Dimensions in mm. Default: 22 × 9 mm labels with no gaps, centred on A4 in a 7 × 23
+            grid.
+          </p>
+          <button id="cutting-layout" type="button" data-i18n="sheet.cuttingLayout">
+            Use 7 × 23 cutting layout
+          </button>
+          <p class="hint" data-i18n="sheet.cuttingHelp">
+            Restores all sheet settings to the cutting defaults, including zero skipped slots. Your
+            label text is preserved.
           </p>
           <form id="settings" novalidate>
             <div class="fields">
@@ -138,9 +146,13 @@
             </div>
             <label class="check"
               ><input name="borders" type="checkbox" /><span data-i18n="settings.borders"
-                >Print cutting outlines</span
+                >Print a black frame around each label</span
               ></label
             >
+            <p class="hint" data-i18n="sheet.cutGuideHelp">
+              Each label keeps its own closed black frame. With zero gaps, cut once through the
+              middle of the 0.3 mm white space between neighbouring frames.
+            </p>
           </form>
         </section>
         <p class="hint" data-i18n="storage.help">
