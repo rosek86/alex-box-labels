@@ -1,0 +1,15 @@
+{
+  "manufacturers": {
+    "Texas Instruments": "TI",
+    "STMicroelectronics": "ST",
+    "Analog Devices": "ADI"
+  },
+  "suppliers": {
+    "Digi-Key": "D",
+    "Mouser": "M",
+    "TME": "T",
+    "Farnell": "F",
+    "LCSC": "L"
+  },
+  "supplierPriority": ["D", "M", "T", "F", "L"]
+}

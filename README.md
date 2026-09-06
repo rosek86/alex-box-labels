@@ -129,7 +129,7 @@ Domain validation throws `LabelError` with a stable code and parameters. The int
 
 ### External data import
 
-External tools can generate project JSON containing `version: 1`, sheet `settings` and a `labels` array of strings. Import that file into the editor to preview and print it. PART-DB integration is still being evaluated and is not included in this repository.
+External tools can generate project JSON containing `version: 1`, sheet `settings` and a `labels` array of strings. Import that file into the editor to preview and print it. The [PART-DB integration](integrations/partdb/README.md) exports parts from your local instance. It has its own Node project, configuration and tests in `integrations/partdb`; it is not included in the GitHub Pages build.
 
 **Multiline editing:** project JSON stores text rows as `\n` within each label string. In the editor, type the two characters `\n` to start a new row within the same label; use `\\` for a literal backslash. A physical Enter still starts a new label. Saved projects round-trip through the editor, including literal backslashes. TXT import retains its original one-label-per-line behavior and treats backslashes literally. Long rows still wrap automatically; check the preview for overflow before printing. Three rows fit the default height at the minimum font size, but long identifiers may require wider labels or different font settings.
 

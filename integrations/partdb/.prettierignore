@@ -1,0 +1,9 @@
+node_modules/
+package-lock.json
+coverage/
+exports/
+local/
+.env
+.env.*
+!.env.example
+partdb.config.json

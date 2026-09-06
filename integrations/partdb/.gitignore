@@ -1,0 +1,30 @@
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
+.cache/
+*.tsbuildinfo
+
+# Local configuration and credentials (keep example files versioned)
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Local exports and working files
+/exports/
+/local/
+/partdb.config.json
+*.log
+npm-debug.log*
+
+# Operating systems and editors
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+.idea/
+*.swp
+*.swo
+*~
