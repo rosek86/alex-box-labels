@@ -27,7 +27,7 @@ The application and tests use **TypeScript and ESM**. `npm start` runs `node ser
 
 The only included example is a **161-label screw, nut and washer list**, covering M1.6 through M8. It fills one complete A4 sheet with the default layout: **7 columns × 23 rows**. The example opens on first use; later visits restore your saved project. Use **Load screw example** to replace the current list, or **Clear list** to start your own. Save your project before replacing a list you want to keep.
 
-1. Enter one label per line. Empty lines reserve blank slots, including a trailing empty line. An empty editor means no labels.
+1. The default **List** editor gives each label a separate field. Enter inserts a text row within that label. Add or remove labels using the buttons; an empty field reserves a blank slot. Select a field to highlight its label in the preview. Switch to **Text** for bulk editing (one physical line per label). Drag the divider to resize the editor panel, or focus it and use the arrow keys.
 2. Set label dimensions, margins and horizontal/vertical gaps to match your sheet and printed boxes. All dimensions, including font sizes, are in millimetres.
 3. For a partly used sheet, set **Skip slots on first page**. Labels run left to right, then top to bottom; subsequent pages start at the first slot.
 4. Use **X offset** and **Y offset** to calibrate alignment. Positive values move labels right and down without changing the grid size.
@@ -131,7 +131,7 @@ Domain validation throws `LabelError` with a stable code and parameters. The int
 
 External tools can generate project JSON containing `version: 1`, sheet `settings` and a `labels` array of strings. Import that file into the editor to preview and print it. The [PART-DB integration](integrations/partdb/README.md) exports parts from your local instance. It has its own Node project, configuration and tests in `integrations/partdb`; it is not included in the GitHub Pages build.
 
-**Multiline editing:** project JSON stores text rows as `\n` within each label string. In the editor, type the two characters `\n` to start a new row within the same label; use `\\` for a literal backslash. A physical Enter still starts a new label. Saved projects round-trip through the editor, including literal backslashes. TXT import retains its original one-label-per-line behavior and treats backslashes literally. Long rows still wrap automatically; check the preview for overflow before printing. Three rows fit the default height at the minimum font size, but long identifiers may require wider labels or different font settings.
+**Multiline editing:** project JSON stores text rows as `\n` within each label string. In List mode, use Enter for a new text row. In Text mode, type the two characters `\n` to start a new row within the same label; use `\\` for a literal backslash. In Text mode, a physical Enter starts a new label. Saved projects round-trip through the editor, including literal backslashes. TXT import retains its original one-label-per-line behavior and treats backslashes literally. Long rows still wrap automatically; check the preview for overflow before printing. Three rows fit the default height at the minimum font size, but long identifiers may require wider labels or different font settings.
 
 ## Development checks
 

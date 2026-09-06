@@ -21,6 +21,15 @@
             <option value="pl" lang="pl">Polski</option>
           </select></label
         >
+        <button
+          id="help"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="help-dialog"
+          data-i18n="actions.help"
+        >
+          Help
+        </button>
         <button id="export-json" type="button" data-i18n="actions.save">Save project</button>
         <button id="export-svg" type="button" disabled data-i18n="actions.svg">Download SVG</button>
         <button id="print" class="primary" type="button" disabled data-i18n="actions.print">
@@ -30,8 +39,7 @@
     </header>
     <main>
       <aside class="panel">
-        <section class="box-project" aria-labelledby="box-project-heading">
-          <h2 id="box-project-heading" data-i18n="boxes.heading">For your ALEX / MALM inserts</h2>
+        <section class="box-project box-intro">
           <p data-i18n="boxes.description">
             Adhesive labels for the 3D-printed boxes in printingbuddy’s IKEA ALEX &amp; Malm
             multiple inserts project.
@@ -43,38 +51,50 @@
             data-i18n="boxes.link"
             >View the boxes on Printables</a
           >
-          <p class="hint" data-i18n="boxes.variants">
-            The collection includes 1×1, 1×2, 2×2 and 3×3 boxes, among other sizes (width × depth).
-          </p>
-          <p class="hint" data-i18n="boxes.fit">
-            Start with 22 × 9 mm labels. Measure the label area on your printed box and adjust the
-            dimensions to fit.
-          </p>
         </section>
         <section>
-          <h2>01 <span data-i18n="labels.heading">Label text</span></h2>
-          <div class="inline example-actions">
-            <button id="load-preset" type="button" data-i18n="actions.loadScrews">
-              Load screw example
-            </button>
-            <button id="clear-list" type="button" data-i18n="actions.clear">Clear list</button>
-          </div>
-          <p class="hint" data-i18n="labels.exampleHelp">
-            161 screw, nut and washer labels fill one A4 sheet with the default settings.
-          </p>
-          <label for="labels" data-i18n="labels.input">One label per line</label>
-          <textarea id="labels" spellcheck="false" aria-describedby="labels-help"></textarea>
-          <p id="labels-help" class="hint" data-i18n="labels.help">
-            An empty line reserves a blank slot. Use \n within a label for a new text row and \\ for
-            a literal backslash. Long descriptions wrap automatically.
-          </p>
+          <h2>01 <span data-i18n="import.heading">Load data</span></h2>
           <label class="file-label"
             ><span data-i18n="labels.import">Import a JSON project or TXT list</span
             ><input id="import" type="file" accept=".json,.txt,application/json,text/plain"
           /></label>
+          <div class="inline example-actions">
+            <button id="load-preset" type="button" data-i18n="actions.loadScrews">
+              Load screw example
+            </button>
+          </div>
+          <p class="hint" data-i18n="labels.exampleHelp">
+            161 screw, nut and washer labels fill one A4 sheet with the default settings.
+          </p>
         </section>
         <section>
-          <h2>02 <span data-i18n="sheet.heading">A4 sheet</span></h2>
+          <h2>02 <span data-i18n="labels.heading">Edit labels</span></h2>
+          <div class="inline">
+            <button id="clear-list" type="button" data-i18n="actions.clear">Clear list</button>
+          </div>
+          <label for="editor-mode" data-i18n="labels.mode">Editor mode</label>
+          <select id="editor-mode">
+            <option value="list" data-i18n="labels.listMode">List</option>
+            <option value="text" data-i18n="labels.textMode">Text</option>
+          </select>
+          <div id="list-editor">
+            <p class="hint" data-i18n="labels.listHelp">
+              Each field is one label. Enter starts a new text row within it.
+            </p>
+            <div id="label-list"></div>
+            <button id="add-label" type="button" data-i18n="labels.add">Add label</button>
+          </div>
+          <div id="text-editor" hidden>
+            <label for="labels" data-i18n="labels.input">One label per line</label>
+            <textarea id="labels" spellcheck="false" aria-describedby="labels-help"></textarea>
+            <p id="labels-help" class="hint" data-i18n="labels.help">
+              An empty line reserves a blank slot. Use \n within a label for a new text row and \\
+              for a literal backslash. Long descriptions wrap automatically.
+            </p>
+          </div>
+        </section>
+        <section>
+          <h2>03 <span data-i18n="sheet.heading">Page settings</span></h2>
           <p class="hint" data-i18n="sheet.help">
             Dimensions in mm. Default: 22 × 9 mm labels with no gaps, centred on A4 in a 7 × 23
             grid.
@@ -150,16 +170,19 @@
                 >Print a black frame around each label</span
               ></label
             >
-            <p class="hint" data-i18n="sheet.cutGuideHelp">
-              Each label keeps its own closed black frame. With zero gaps, cut once through the
-              middle of the 0.3 mm white space between neighbouring frames.
-            </p>
           </form>
         </section>
-        <p class="hint" data-i18n="storage.help">
-          Your project is saved locally in this browser. Save it as JSON before replacing the list.
-        </p>
       </aside>
+      <div
+        id="panel-resize"
+        role="separator"
+        tabindex="0"
+        aria-orientation="vertical"
+        aria-valuemin="280"
+        aria-valuenow="420"
+        aria-label="Resize editor panel"
+        data-i18n-aria-label="labels.resize"
+      ></div>
       <section class="preview" aria-label="Print preview" data-i18n-aria-label="preview.heading">
         <div class="preview-heading">
           <h2 data-i18n="preview.heading">Print preview</h2>
@@ -178,6 +201,34 @@
         <div id="pages"></div>
       </section>
     </main>
+    <dialog id="help-dialog" aria-labelledby="help-title">
+      <h2 id="help-title" data-i18n="help.heading">Label printing guide</h2>
+      <h3 data-i18n="help.cutting">Cutting labels</h3>
+
+      <p class="hint" data-i18n="sheet.cutGuideHelp">
+        Each label keeps its own closed black frame. With zero gaps, cut once through the middle of
+        the 0.3 mm white space between neighbouring frames.
+      </p>
+      <h3 data-i18n="help.saving">Saving your work</h3>
+
+      <p class="hint" data-i18n="storage.help">
+        Your project is saved locally in this browser. Save it as JSON before replacing the list.
+      </p>
+
+      <section class="box-project" aria-labelledby="box-project-heading">
+        <h2 id="box-project-heading" data-i18n="boxes.heading">For your ALEX / MALM inserts</h2>
+        <p class="hint" data-i18n="boxes.variants">
+          The collection includes 1×1, 1×2, 2×2 and 3×3 boxes, among other sizes (width × depth).
+        </p>
+        <p class="hint" data-i18n="boxes.fit">
+          Start with 22 × 9 mm labels. Measure the label area on your printed box and adjust the
+          dimensions to fit.
+        </p>
+      </section>
+      <form method="dialog">
+        <button type="submit" autofocus data-i18n="actions.close">Close</button>
+      </form>
+    </dialog>
     <div id="print-error" data-i18n="print.blocked">
       Printing unavailable. Fix the errors in the label editor.
     </div>

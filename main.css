@@ -88,12 +88,91 @@ button:disabled {
 }
 main {
   display: grid;
-  grid-template-columns: 355px minmax(0, 1fr);
+  grid-template-columns: clamp(280px, var(--panel-width, 420px), 65vw) 8px minmax(0, 1fr);
 }
 .panel {
+  min-width: 0;
   background: #fafbf9;
   border-right: 1px solid #d7dfd9;
   padding: 26px 24px;
+}
+[hidden] {
+  display: none !important;
+}
+#panel-resize {
+  cursor: col-resize;
+  touch-action: none;
+  background: #d7dfd9;
+}
+#panel-resize:hover,
+#panel-resize:focus {
+  background: #527468;
+}
+#editor-mode {
+  margin: 8px 0;
+}
+#label-list {
+  max-height: 65vh;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  border: 1px solid #c6d1ca;
+  border-radius: 5px;
+}
+.label-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px;
+  border-bottom: 1px solid #c6d1ca;
+  background: white;
+}
+.label-entry:last-child {
+  border-bottom: 0;
+}
+.label-entry:nth-child(even) {
+  background: #f5f8f5;
+}
+.label-entry.is-selected {
+  background: #eff6f1;
+  box-shadow: inset 3px 0 #225d47;
+}
+.label-entry button {
+  grid-column: 2;
+  grid-row: 1;
+  border: 0;
+  border-left: 1px solid #c6d1ca;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  font-size: 18px;
+}
+.label-entry button:hover {
+  background: #ffebe4;
+  color: #8b3013;
+}
+.label-entry textarea {
+  grid-column: 1;
+  grid-row: 1;
+  min-height: 40px;
+  resize: none;
+  overflow: hidden;
+  margin: 0;
+  font-size: 13px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 8px 10px;
+}
+#add-label {
+  margin: 10px 0;
+}
+.selection-guide {
+  stroke: none;
+  fill: none;
+  pointer-events: none;
+}
+.selection-guide.selected-label {
+  stroke: #225d47;
+  stroke-width: 0.5;
+  stroke-dasharray: none;
 }
 .panel section + section {
   border-top: 1px solid #d7dfd9;
@@ -109,6 +188,9 @@ main {
 .box-project h2 {
   color: #294a3d;
   margin-bottom: 10px;
+}
+.box-intro p {
+  margin: 0 0 8px;
 }
 .box-project a {
   color: #225d47;
@@ -256,6 +338,24 @@ dialog {
 dialog::backdrop {
   background: #16312666;
 }
+#help-dialog {
+  width: min(560px, 90vw);
+}
+#help-dialog h2 {
+  color: #202b2a;
+  font-size: 18px;
+}
+#help-dialog h3 {
+  font-size: 14px;
+  margin: 22px 0 8px;
+}
+#help-dialog .box-project {
+  margin-top: 24px;
+}
+#help-dialog form {
+  text-align: right;
+  margin-top: 20px;
+}
 dialog button {
   margin: 4px;
 }
@@ -266,7 +366,7 @@ dialog button {
     padding: 20px;
   }
   main {
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: clamp(280px, var(--panel-width, 320px), 65vw) 8px minmax(0, 1fr);
   }
   .panel,
   .preview {
@@ -274,6 +374,9 @@ dialog button {
   }
 }
 @media (max-width: 650px) {
+  #panel-resize {
+    display: none;
+  }
   main {
     display: block;
   }
@@ -297,6 +400,7 @@ dialog button {
     background: #fff;
   }
   .toolbar,
+  #panel-resize,
   .panel,
   .preview-heading,
   .print-tip,

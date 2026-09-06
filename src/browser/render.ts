@@ -65,6 +65,15 @@ export function renderPreview(container: HTMLElement, layout: LabelLayout, t: Tr
         width: settings.labelWidth,
         height: settings.labelHeight,
       };
+      if (slot.text !== null) {
+        svg.append(
+          svgElement('rect', {
+            ...rect,
+            class: 'preview-guide selection-guide',
+            'data-label-index': slot.index,
+          }),
+        );
+      }
       if (slot.text === null || !slot.text.trim()) continue;
       const fitted = fitText(slot.text, settings, measure);
       if (!fitted) {

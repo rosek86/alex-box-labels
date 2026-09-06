@@ -8,6 +8,7 @@ const PUBLIC_FILES = new Set([
   'index.html',
   'main.css',
   'src/browser/app.ts',
+  'src/browser/label-editor.ts',
   'src/browser/language.ts',
   'src/core/errors.ts',
   ...(await readdir(new URL('src/i18n/', PROJECT_ROOT)))

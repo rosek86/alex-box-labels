@@ -1,12 +1,12 @@
 import { DEFAULTS } from '../core/constants.ts';
 import { createLayout } from '../core/layout.ts';
-import { parseEditorText, formatEditorText } from '../core/labels.ts';
+import { createLabelEditor, enablePanelResize } from './label-editor.ts';
 import { createTranslator, resolveLocale, translateError } from '../i18n/index.ts';
 import { populateLanguages, restoreLocale, saveLocale, translateDocument } from './language.ts';
 import type { LabelProject } from '../core/types.ts';
 import { LABEL_PRESETS } from '../data/presets.ts';
 import { requiredElement } from './dom.ts';
-import { applyProject, applySettings, readSettings } from './settings-form.ts';
+import { applySettings, readSettings } from './settings-form.ts';
 import { renderPreview } from './render.ts';
 import { downloadProject, downloadSheets, readProjectFile } from './project-files.ts';
 import { restoreProject, saveProject } from './storage.ts';
@@ -28,6 +28,24 @@ languageSelect.value = locale;
 translateDocument(locale, t);
 let renderTimer: number | undefined;
 let revision = 0;
+const labelEditor = createLabelEditor(
+  editor,
+  () => t,
+  queueRender,
+  (index) => highlightLabel(index, true),
+);
+enablePanelResize();
+const helpDialog = requiredElement('#help-dialog', HTMLDialogElement);
+requiredElement('#help', HTMLButtonElement).addEventListener('click', () => helpDialog.showModal());
+
+function highlightLabel(index: number, scroll = false): void {
+  pages.querySelector('.selected-label')?.classList.remove('selected-label');
+  const guide = pages.querySelector<SVGRectElement>(`[data-label-index="${index}"]`);
+  guide?.classList.add('selected-label');
+  // Keep the selection visible above text and overflow warnings.
+  if (guide) guide.parentNode?.appendChild(guide);
+  if (scroll) guide?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+}
 
 function showError(message: string): void {
   errorBox.textContent = message;
@@ -46,10 +64,11 @@ function render(): LabelProject | null {
   showError('');
   stats.textContent = '';
   try {
-    const labels = parseEditorText(editor.value);
+    const labels = labelEditor.read();
     const layout = createLayout(labels, readSettings(form));
     const project: LabelProject = { version: 1, settings: layout.settings, labels };
     const overflow = renderPreview(pages, layout, t);
+    highlightLabel(labelEditor.active());
     const count = labels.filter((label) => label.trim()).length;
     stats.textContent = t('preview.stats', {
       count,
@@ -92,10 +111,10 @@ languageSelect.addEventListener('change', () => {
   t = createTranslator(locale);
   saveLocale(locale);
   translateDocument(locale, t);
+  labelEditor.refreshLanguage();
   render();
 });
 
-editor.addEventListener('input', queueRender);
 requiredElement('#cutting-layout', HTMLButtonElement).addEventListener('click', () => {
   revision++;
   applySettings(DEFAULTS, form);
@@ -105,12 +124,12 @@ form.addEventListener('input', queueRender);
 form.addEventListener('submit', (event) => event.preventDefault());
 requiredElement('#load-preset', HTMLButtonElement).addEventListener('click', () => {
   revision++;
-  editor.value = formatEditorText(LABEL_PRESETS.bolts);
+  labelEditor.set(LABEL_PRESETS.bolts);
   render();
 });
 requiredElement('#clear-list', HTMLButtonElement).addEventListener('click', () => {
   revision++;
-  editor.value = '';
+  labelEditor.set([]);
   render();
 });
 printButton.addEventListener('click', () => {
@@ -136,7 +155,8 @@ importInput.addEventListener('change', async () => {
   try {
     const project = await readProjectFile(file, readSettings(form));
     if (importRevision !== revision) return;
-    applyProject(project, editor, form);
+    labelEditor.set(project.labels);
+    applySettings(project.settings, form);
     render();
   } catch (error) {
     if (importRevision === revision)
@@ -158,7 +178,8 @@ function initialize(): void {
   } catch {
     restoreWarning = t('status.restoreFailed');
   }
-  applyProject(initial, editor, form);
+  labelEditor.set(initial.labels);
+  applySettings(initial.settings, form);
   render();
   if (restoreWarning) status.textContent = restoreWarning;
 }
