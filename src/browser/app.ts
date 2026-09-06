@@ -1,6 +1,6 @@
 import { DEFAULTS } from '../core/constants.ts';
 import { createLayout } from '../core/layout.ts';
-import { parseText } from '../core/labels.ts';
+import { parseEditorText, formatEditorText } from '../core/labels.ts';
 import { createTranslator, resolveLocale, translateError } from '../i18n/index.ts';
 import { populateLanguages, restoreLocale, saveLocale, translateDocument } from './language.ts';
 import type { LabelProject } from '../core/types.ts';
@@ -46,7 +46,7 @@ function render(): LabelProject | null {
   showError('');
   stats.textContent = '';
   try {
-    const labels = parseText(editor.value);
+    const labels = parseEditorText(editor.value);
     const layout = createLayout(labels, readSettings(form));
     const project: LabelProject = { version: 1, settings: layout.settings, labels };
     const overflow = renderPreview(pages, layout, t);
@@ -105,7 +105,7 @@ form.addEventListener('input', queueRender);
 form.addEventListener('submit', (event) => event.preventDefault());
 requiredElement('#load-preset', HTMLButtonElement).addEventListener('click', () => {
   revision++;
-  editor.value = LABEL_PRESETS.bolts.join('\n');
+  editor.value = formatEditorText(LABEL_PRESETS.bolts);
   render();
 });
 requiredElement('#clear-list', HTMLButtonElement).addEventListener('click', () => {

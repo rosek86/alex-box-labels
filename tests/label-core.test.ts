@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { DEFAULTS } from '../src/core/constants.ts';
 import { validateSettings } from '../src/core/settings.ts';
-import { parseText } from '../src/core/labels.ts';
+import { parseText, parseEditorText, formatEditorText } from '../src/core/labels.ts';
 import { createLayout } from '../src/core/layout.ts';
 import { wrapText, fitText } from '../src/core/text.ts';
 import { parseProject } from '../src/core/project.ts';
@@ -119,12 +119,24 @@ test('import nie akceptuje obiektów zamiast opisów ani obcej wersji', () => {
     {},
     { version: 2, settings: {}, labels: [] },
     { version: 1, settings: {}, labels: [{}] },
-    { version: 1, settings: {}, labels: ['a\nb'] },
     { version: 1, settings: [], labels: [] },
     { version: 1, settings: {}, labels: ['x'.repeat(1001)] },
   ]) {
     assert.throws(() => parseProject(value));
   }
+});
+
+test('multiline labels survive JSON, editor and layout without adding slots', () => {
+  const labels = ['TI\nNE555P\nM:595-NE555P', '', 'literal \\n and \\path', 'trailing\n'];
+  const project = parseProject(
+    JSON.parse(JSON.stringify({ version: 1, settings: DEFAULTS, labels })),
+  );
+  assert.deepEqual(parseEditorText(formatEditorText(project.labels)), labels);
+  assert.equal(createLayout(project.labels).pages[0]?.[1]?.text, '');
+  assert.deepEqual(wrapText(labels[0]!, 2, 20.4, measure), ['TI', 'NE555P', 'M:595-NE555P']);
+  assert.deepEqual(wrapText('A\n\nB', 2, 20, measure), ['A', '', 'B']);
+  assert.ok(fitText(labels[0]!, DEFAULTS, measure));
+  assert.equal(fitText('A\nB\nC\nD', DEFAULTS, measure), null);
 });
 
 test('saved projects retain their explicit margins and gaps', () => {

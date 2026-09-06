@@ -27,7 +27,8 @@ export const pl = {
   'actions.print': 'Drukuj / PDF',
   'labels.heading': 'Opisy etykiet',
   'labels.input': 'Jeden opis w każdym wierszu',
-  'labels.help': 'Pusty wiersz zostawia wolne miejsce. Długie opisy zawijają się automatycznie.',
+  'labels.help':
+    'Pusty wiersz zostawia wolne miejsce. Użyj \\n wewnątrz opisu, aby zacząć nowy wiersz etykiety, oraz \\\\ dla dosłownego ukośnika wstecznego. Długie opisy zawijają się automatycznie.',
   'labels.import': 'Wczytaj projekt JSON lub listę TXT',
   'sheet.heading': 'Arkusz A4',
   'sheet.help':
@@ -82,8 +83,7 @@ export const pl = {
   'error.skip': 'Liczba pomijanych pól musi być całkowita, od 0 do {max}.',
   'error.offset': 'Przesunięcie powoduje wyjście etykiet poza arkusz A4.',
   'error.tooManyLabels': 'Lista może zawierać maksymalnie {max} etykiet.',
-  'error.labelText':
-    'Każda etykieta musi być jednym opisem tekstowym, do {max} znaków, bez znaków nowego wiersza.',
+  'error.labelText': 'Każda etykieta musi być tekstem do {max} znaków.',
   'error.projectSize':
     'Projekt jest zbyt duży. Podziel go na mniejsze listy (maks. {pages} stron i {slots} pól).',
   'error.projectFormat': 'Nieobsługiwany projekt. Wymagane: version: 1, settings i labels.',

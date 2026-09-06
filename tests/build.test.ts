@@ -19,6 +19,7 @@ test('build statyczny działa pod ścieżką repozytorium bez serwera TypeScript
   assert.ok(files.includes('.nojekyll'));
   assert.ok(!files.some((file) => /\.(?:ts|json)$/.test(file)));
   assert.ok(!files.some((file) => file.includes('server') || file.includes('node_modules')));
+  assert.ok(!files.some((file) => file.includes('partdb') || file.includes('.env')));
 
   const base = new URL('https://example.github.io/box-labels/');
   const html = await readFile(new URL('index.html', output), 'utf8');

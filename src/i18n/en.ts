@@ -26,7 +26,8 @@ export const en = {
   'actions.print': 'Print / PDF',
   'labels.heading': 'Label text',
   'labels.input': 'One label per line',
-  'labels.help': 'An empty line reserves a blank slot. Long descriptions wrap automatically.',
+  'labels.help':
+    'An empty line reserves a blank slot. Use \\n within a label for a new text row and \\\\ for a literal backslash. Long descriptions wrap automatically.',
   'labels.import': 'Import a JSON project or TXT list',
   'sheet.heading': 'A4 sheet',
   'sheet.help':
@@ -80,8 +81,7 @@ export const en = {
   'error.skip': 'The number of skipped slots must be a whole number from 0 to {max}.',
   'error.offset': 'The offset moves labels outside the A4 sheet.',
   'error.tooManyLabels': 'The list can contain at most {max} labels.',
-  'error.labelText':
-    'Each label must be a single text description, up to {max} characters, without line breaks.',
+  'error.labelText': 'Each label must be text, up to {max} characters.',
   'error.projectSize':
     'The project is too large. Split it into smaller lists (max. {pages} pages and {slots} slots).',
   'error.projectFormat': 'Unsupported project. Required: version: 1, settings and labels.',

@@ -7,6 +7,15 @@ export function wrapText(
   width: number,
   measure: MeasureText,
 ): string[] | null {
+  if (/[\r\n]/.test(text)) {
+    const lines: string[] = [];
+    for (const paragraph of text.replace(/\r\n?/g, '\n').split('\n')) {
+      const wrapped = wrapText(paragraph, size, width, measure);
+      if (!wrapped) return null;
+      lines.push(...(wrapped.length ? wrapped : ['']));
+    }
+    return lines;
+  }
   const words = text.trim().split(/\s+/).filter(Boolean);
   const lines = [];
   let line = '';

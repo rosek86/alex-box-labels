@@ -8,3 +8,5 @@ exports/
 local/
 .env
 .env.*
+# Integrations have their own formatting commands and configuration.
+integrations/

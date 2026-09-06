@@ -1,4 +1,5 @@
 import { LabelError } from '../core/errors.ts';
+import { formatEditorText } from '../core/labels.ts';
 import { DEFAULTS, NUMERIC_SETTINGS } from '../core/constants.ts';
 import type { LabelProject, LabelSettings } from '../core/types.ts';
 
@@ -24,7 +25,7 @@ export function applyProject(
   editor: HTMLTextAreaElement,
   form: HTMLFormElement,
 ): void {
-  editor.value = project.labels.join('\n');
+  editor.value = formatEditorText(project.labels);
   applySettings(project.settings, form);
 }
 
