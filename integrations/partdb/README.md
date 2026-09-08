@@ -77,3 +77,12 @@ Code responsibilities:
 - `src/output.ts`: output validation and writing the project and report.
 
 This is a standalone project: it does not import files or dependencies from the label editor. `src/core/` contains a snapshot of the version 1 label format validation and default sheet settings. Keep this contract compatible with the editor when modifying it. The projects exchange JSON files only.
+
+## Export an ID range
+
+```sh
+npm run export:partdb -- --from-id 71 --force
+npm run export:partdb -- --from-id 71 --to-id 100 --force
+```
+
+Bounds are inclusive; either can be omitted. Combine them with category/location filters, but not with `--ids` or `--all`. Missing IDs are skipped. The exporter filters the paginated collection locally before requesting part details; the existing 5000-record collection limit still applies. With a private CA, use the `NODE_EXTRA_CA_CERTS` prefix described above.

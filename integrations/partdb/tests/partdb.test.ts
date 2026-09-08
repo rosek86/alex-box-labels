@@ -126,3 +126,36 @@ test('untrusted API links, pagination loops, malformed data and HTTP errors fail
   assert.throws(() => parseConfig({ supplierPriority: 'M' }), /supplierPriority/);
   assert.throws(() => parseConfig({ typo: {} }), /Unknown/);
 });
+
+test('inclusive ID bounds filter paginated records before fetching details and tolerate gaps', async () => {
+  const routes = {
+    '/db/api/parts?order%5Bid%5D=asc&itemsPerPage=100': {
+      member: [{ id: 70 }, { id: 71 }],
+      view: { next: '/db/api/parts?page=2' },
+    },
+    '/db/api/parts?page=2': { member: [{ '@id': '/db/api/parts/73' }, { id: 100 }] },
+    '/db/api/parts/70': { id: 70 },
+    '/db/api/parts/71': { id: 71 },
+    '/db/api/parts/73': { id: 73 },
+    '/db/api/parts/100': { id: 100 },
+  };
+  for (const [selection, expected] of [
+    [{ fromId: 71 }, [71, 73, 100]],
+    [{ fromId: 71, toId: 73 }, [71, 73]],
+    [{ toId: 71 }, [70, 71]],
+    [{ fromId: 71, toId: 71 }, [71]],
+    [{ fromId: 72, toId: 72 }, []],
+  ] as const) {
+    const { client, calls } = fixture(routes);
+    assert.deepEqual(
+      (await selectParts(client, selection)).map((part) => part.id),
+      expected,
+    );
+    assert.equal(calls.filter((path) => /\/parts\/\d+$/.test(path)).length, expected.length);
+  }
+  const { client, calls } = fixture({});
+  await assert.rejects(selectParts(client, { fromId: 80, toId: 71 }), /must not exceed/);
+  await assert.rejects(selectParts(client, { fromId: 0 }), /positive/);
+  await assert.rejects(selectParts(client, { fromId: 71, ids: ['72'] }), /without/);
+  assert.equal(calls.length, 0);
+});
